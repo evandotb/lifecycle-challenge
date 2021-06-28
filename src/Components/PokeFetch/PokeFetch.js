@@ -9,6 +9,7 @@ class PokeFetch extends Component {
       pokeInfo: '',
       pokeSprite: '',
       pokeName: '',
+      timer: 10
     }
   }
 
@@ -24,6 +25,7 @@ class PokeFetch extends Component {
           pokeInfo: res,
           pokeSprite: res.sprites.front_default,
           pokeName: res.species.name,
+          timer: 10
         })
       })
       .catch((err) => console.log(err))
