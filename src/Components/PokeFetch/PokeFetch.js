@@ -9,11 +9,14 @@ class PokeFetch extends Component {
       pokeInfo: '',
       pokeSprite: '',
       pokeName: '',
-      timer: 10
+      seconds: 10
     }
+    this.startTimer = this.startTimer.bind(this);
+    this.countDown = this.countDown.bind(this);
   }
 
   fetchPokemon() {
+    this.countDown();
     let min = Math.ceil(1);
     let max = Math.floor(152);
     let pokeNum = Math.floor(Math.random() * (max - min) + min);
@@ -28,21 +31,48 @@ class PokeFetch extends Component {
           timer: 10
         })
       })
+      .then(this.startTimer())
       .catch((err) => console.log(err))
   }
 
+  startTimer(){
+    const interval = setInterval(() => {
+      if(this.state.timer > 0){
+        this.setState({
+          timer: this.state.timer-1
+        })
+      } else {
+        clearInterval(interval)
+      }
+    }, 1000)
+  }
+
+  countDown(){
+    this.setState({
+      seconds: 10
+    })
+  }
+
   render() {
-    return (
-      <div className={'wrapper'}>
+    if(this.state.seconds > 0){
+      const styles = {
+        filter: 'brightness(0%)'
+      }
+      const textStyles = {
+        visibility: 'hidden'
+      }
+      return (
+        <div className={'wrapper'}>
         <button className={'start'} onClick={() => this.fetchPokemon()}>Start!</button>
-        <h1 className={'timer'} >Timer Display</h1>
+        <h1 className={'timer'} >{this.state.timer}</h1>
         <div className={'pokeWrap'}>
-          <img className={'pokeImg'} src={this.state.pokeSprite} />
-          <h1 className={'pokeName'}>{this.state.pokeName}</h1>
+          <img className={'pokeImg'} src={this.state.pokeSprite} style={styles} />
+          <h1 className={'pokeName'} style={textStyles}>{this.state.pokeName}</h1>
         </div>
       </div>
     )
   }
+}
 }
 
 export default PokeFetch;
